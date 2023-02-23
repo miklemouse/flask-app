@@ -207,7 +207,6 @@ app = Flask(__name__)
 
 links = {"Download" : "/download",
          "Download analysis in PDF" : "/analysis",
-         "View Raw Data" : "/view_data",
          "Descriptive stats" : "/stats",
          "1. Fully vaxed perc worldwide [LINE]" : "/graph1",
          "2. Fully vaxed perc by region [LINE]" : "/graph2",
@@ -235,24 +234,6 @@ def download_data():
 @app.route(links["Download analysis in PDF"], methods=['GET'])
 def download_analysis():
     return send_file("data/Vaccination_Analysis.pdf", as_attachment=True)
-
-@app.route(links["View Raw Data"], methods=['GET'])
-def view_data():
-    df = pd.read_csv("data/country_vaccinations.csv")
-    errors = []
-    current_filter_value = ""
-    if request.method == "POST":
-        current_filter = request.form.get('filters')
-        current_filter_value = current_filter
-        if current_filter:
-            try:
-                df = df.query(current_filter)
-            except Exception as e:
-                errors.append('<font color="red">Incorrect filter</font>')
-                print(e)
-
-    html_string = df.to_html()
-    return render_index(html_string=html_string, filters=True, errors=errors, current_filter_value=current_filter_value)
 
 @app.route(links["Descriptive stats"], methods=['GET'])
 def desc_stats():
