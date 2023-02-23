@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<html>
+    <head>
+        <title>My Web Server</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?20211207">
+    </head>
+<body>
+<div>
+
+    <div class="vertical-menu">
+      <a href="#" class="active">Home</a>
+        {% for text, link in links.items() %}
+            <a href="{{ link }}">{{ text }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+    <div style="margin-left:20%;margin-top:3%;border: 2px;">
+         {% if filters != None  %}
+            <div style="margin-bottom:2%">
+                <form method="POST">
+                    <label for="filters">Filters</label>
+                    <input type="text" id="filters" name="filters" value={{ current_filter_value }}>
+                </form>
+            </div>
+        {% endif %}
+
+        {% if errors != None  %}
+            <div id="errors_box">
+            {% for error in errors %}
+                <p> {{ error | safe }} </p>
+            {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if image != None  %}
+            <img src="{{ url_for('static', filename='tmp/' + image[0]) }}?{{ code }}" alt="{{ image[1] }}" style="max-width:1000px;border: 5px solid #555;">
+        {% endif %}
+        {% if html_string != None  %}
+            {{ html_string | safe }}
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
